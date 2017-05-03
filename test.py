@@ -84,6 +84,15 @@ class Test(object):
     def gold_collected(self):
         return self.gold.exists()
 
+##    Возможно стоит объединить два следующих метода в нечто типа
+##
+##    def clear(self,obj):
+##        if self.__dict__[obj].exists():
+##            for fn in self.__dict__[obj].glob('*.*'):
+##                fn.unlink()
+##
+##    Но лучше не надо(я не знаю к чему придраться)
+                
     def clear_results(self):
         if self.results.exists():
             for fn in self.results.glob('*.*'):
@@ -102,6 +111,16 @@ class Test(object):
                 pass
 
     def exec_test_tool(self, case_id, params, workdir, log):
+##        Данная функция - обертка для запуска функций класса Runner модуля run.
+##        Ее минус - при добавлении нового метода в Runner, придется ее дополнять.
+##        
+##        Предлагаю создать в Runner дополнительный метод(он закоменчен в модуле run) и
+##        переписать данную функцию так:
+##
+##        return self.runner.namefunc(test_type, case_id, params, workdir, log)
+##
+##        Либо вообще убрать данную функцию и использовать вызов self.runner.namefunc() 
+##        Это позволит при добавлении методов в класс Runner не изменять модуль test
         if self.test_type == 'decode':
             return self.runner.sample_decode(case_id, params, workdir, log)
         elif self.test_type == 'encode':
@@ -238,9 +257,9 @@ class Test(object):
 
                 else:
                     if 'target_usage' in case:
-                        case['target_usage'] = objects.TargetUsage(case['target_usage'])
-
+                        case['target_usage'] = objects.TargetUsage(case['target_usage'])                   
                     if 'bitrate' not in case and 'qp' not in case:
+##                    возможно в следующей строке имелось в виду "undefined bitrate AND QP"                      
                         raise ValidationError("undefined bitrate or QP")
                     if 'bitrate' in case and 'qp' in case:
                         raise ValidationError("both bitrate and QP defined")
