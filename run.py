@@ -117,6 +117,19 @@ class Runner(object):
 
         return cmd
 
+##    Предлагаю добавить метод namefunc(название временное), который будет
+##    оберткой для методов sample_decode, sample_encode и других.
+##    
+##        def namefunc(self,test_type, case_id, params, workdir, log):
+##            method={'decode':self.sample_decode,
+##                    'encode':self.sample_encode,
+##                    'transcode':sample_multi_transcode,
+##                    'vpp':sample_vpp}
+##            return method[test_type](case_id, params, workdir, log)
+##        
+##    Заменит частично или полностью exec_test_tool класса Test модуля test
+        
+                
     def sample_decode(self, case_id, case, workdir, log):
         cmd = ['sample_decode']
         cmd.append('-hw')
